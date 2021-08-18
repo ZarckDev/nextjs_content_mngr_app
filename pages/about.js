@@ -1,24 +1,10 @@
-import Navbar from 'components/Navbar';
-
-const MyTest = (props) => {
-  return (
-    <>
-      <h1>My Test Component</h1>
-      {props.children}
-    </>
-  );
-};
+import Layout from 'components/Layout';
 
 function About() {
   return (
-    <>
-      <Navbar />
-      {/* Pass props to the components as children */}
-      <MyTest>
-        <h1>I am about page</h1>
-        <h2>Hello World</h2>
-      </MyTest>
-    </>
+    <Layout>
+      <h1>I am about page</h1>
+    </Layout>
   );
 }
 
