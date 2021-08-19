@@ -5,8 +5,29 @@ import ResourceHighlight from 'components/ResourceHighlight';
 import Newsletter from 'components/Newsletter';
 import ResourceList from 'components/ResourceList';
 import Footer from 'components/Footer';
+import { useEffect } from 'react';
+
+// CORS cannot make request from one domain to another (forbidden, not secure)
+// not possible in the Home() function for example
 
 function Home({ resources }) {
+  // CORS cannot make request from one domain to another (forbidden, not secure)
+  // BELOW : not possible in the Home() function for example
+  // useEffect(() => {
+  //   fetch('http://http://localhost:3001/api/resources');
+  // }, []);
+
+  //FIRST solution to CORS
+  // try with localhost:3000 thanks to resources.js (server), same domain request
+  // useEffect(() => {
+  //   fetch('http://http://localhost:3000/api/resources');
+  // }, []);
+
+  // SECOND solution, use cors NPM package on Node server API to mention the domain localhost:3000, and now we are able to to de request
+  useEffect(() => {
+    fetch('http://http://localhost:3001/api/resources');
+  }, []);
+
   return (
     <Layout>
       {/* only show the first 2 resources */}
@@ -22,7 +43,7 @@ function Home({ resources }) {
 // function is executed on the server
 // data are always fresh
 export async function getServerSideProps() {
-  const resData = await fetch('http://localhost:3000/api/resources');
+  const resData = await fetch('http://localhost:3001/api/resources'); // from node server
   const data = await resData.json();
 
   return {
@@ -31,19 +52,5 @@ export async function getServerSideProps() {
     },
   };
 }
-
-// is called at the build time, and it's called only once
-// build time so when the html file is created !
-//
-// export async function getStaticProps() {
-//   const resData = await fetch('http://localhost:3000/api/resources');
-//   const data = await resData.json();
-
-//   return {
-//     props: {
-//       resources: data,
-//     },
-//   };
-// }
 
 export default Home;
