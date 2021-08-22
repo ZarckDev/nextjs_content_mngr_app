@@ -1,6 +1,12 @@
 import Layout from 'components/Layout';
+import { useRouter } from 'next/router';
 
 const ResourceDetail = ({ resource }) => {
+  const router = useRouter();
+
+  if (router.isFallback) {
+    return <div>Loading data!</div>;
+  }
   return (
     <Layout>
       <section className='hero '>
@@ -24,23 +30,26 @@ const ResourceDetail = ({ resource }) => {
   );
 };
 
-//getInitialProps executed both on the server and the client (a bit deprecated method)
-// ResourceDetail.getInitialProps = async ({ query }) => {
-//   // CORS issue with this method (server works but the browser client make CORS issue)
-//   const dataRes = await fetch(
-//     `http://localhost:3001/api/resources/${query.id}`
-//   ); // params.id connected to [id].js name
-//   const data = await dataRes.json();
+export async function getStaticPaths() {
+  // will create as many pages as there are resources (will generate HTML/json for each at build)  ==> using getServerSideProps, only one page will be generated
+  const dataRes = await fetch(`http://localhost:3001/api/resources`);
+  const data = await dataRes.json();
+  const paths = data.map((resource) => {
+    return {
+      params: { id: resource.id },
+    };
+  });
 
-//   return {
-//     resource: data,
-//   };
-// };
+  return {
+    paths,
+    // when false , means that other routes should resolve into 404 page
+    fallback: false, // when true, execute to try to fetch data before going to 404 ( we give a chance to find it)
+    // example when a resource is created whil app is running, it will try to find the resource thanks to fallback
+  };
+}
 
-export async function getServerSideProps({ params }) {
-  // see documentation for getServerSideProps
-  //   function getServerSideProps({ params, query })
-  //   console.log(query); // we can also access to the id through the URL, but we can have more things, ex: ferferfer?someparam="helloworld"
+export async function getStaticProps({ params }) {
+  // getStaticProps need to be called at the build time, so we nee to know avery resource before calling
 
   const dataRes = await fetch(
     `http://localhost:3001/api/resources/${params.id}`
@@ -52,6 +61,7 @@ export async function getServerSideProps({ params }) {
     props: {
       resource: data,
     },
+    revalidate: 1, // after 1s regenerate the page (example if a data is updated between, normally the HTML pages are already generated so we won't get the update, thanks to revalidate, it's possible)
   };
 }
 
