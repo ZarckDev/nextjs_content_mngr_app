@@ -1,7 +1,7 @@
 // name index.js is not taking into consideration
 import Layout from 'components/Layout';
 import ResourceLabel from 'components/ResourceLabel';
-import Link from 'next/Link';
+import Link from 'next/link';
 import axios from 'axios';
 import moment from 'moment'; // format date
 

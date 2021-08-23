@@ -1,5 +1,5 @@
 //in order to get Link as component, and not refreshing the page ( so new request) when changing page --> much faster !
-import Link from 'next/Link';
+import Link from 'next/link';
 
 const Navbar = () => {
   return (

@@ -1,4 +1,4 @@
-import Link from 'next/Link';
+import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import moment from 'moment';

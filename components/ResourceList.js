@@ -1,4 +1,4 @@
-import Link from 'next/Link';
+import Link from 'next/link';
 import ResourceLabel from 'components/ResourceLabel';
 import moment from 'moment'; // format date
 
