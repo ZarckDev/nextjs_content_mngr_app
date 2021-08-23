@@ -1,8 +1,10 @@
 import Navbar from './Navbar';
+import ActiveResource from 'components/ActiveResource';
 
 const Layout = ({ children }) => (
   <>
     <Navbar />
+    <ActiveResource />
     {children}
   </>
 );
